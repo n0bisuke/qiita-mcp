@@ -1,9 +1,46 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import { readFileSync } from 'fs';
+import { homedir } from 'os';
+import path from 'path';
 
-// トークンを設定
-const token = 'a255792cf9f7dd8d3a92fc4f088a86630d2786c1';
+// トークンを環境変数またはClaude Desktopの設定から取得
+function getQiitaTokenFromConfig() {
+  try {
+    // トークンの取得方法を柔軟に対応
+    const configPaths = [
+      path.join(homedir(), '.claude-desktop', 'config.json'),
+      path.join(homedir(), '.claude', 'config.json')
+    ];
+
+    for (const configPath of configPaths) {
+      try {
+        const configContent = readFileSync(configPath, 'utf8');
+        const config = JSON.parse(configContent);
+        
+        // Qiitaトークンの保存場所に応じて適切に調整
+        const token = config.qiitaToken || config.services?.qiita?.token || process.env.QIITA_TOKEN;
+        
+        if (token) return token;
+      } catch (fileError) {
+        // ファイルが存在しない、または読み取れない場合は次のパスを試す
+        continue;
+      }
+    }
+
+    // 環境変数からも取得を試みる
+    const envToken = process.env.QIITA_TOKEN;
+    if (envToken) return envToken;
+
+    throw new Error('Qiitaトークンが見つかりません');
+  } catch (error) {
+    console.error('トークン取得エラー:', error.message);
+    throw error;
+  }
+}
+
+const token = getQiitaTokenFromConfig();
 
 // Qiita APIのベースURL
 const BASE_URL = 'https://qiita.com/api/v2';
