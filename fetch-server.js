@@ -190,6 +190,56 @@ server.tool(
   }
 );
 
+// 記事を投稿するツール
+server.tool(
+  "create_qiita_article",
+  "Qiitaに新しい記事を投稿します",
+  { 
+    title: z.string(),
+    body: z.string(),
+    tags: z.array(z.object({
+      name: z.string(),
+      versions: z.array(z.string()).optional()
+    })),
+    private: z.boolean().optional().default(false),
+    tweet: z.boolean().optional().default(false)
+  },
+  async ({ title, body, tags, private: isPrivate, tweet }) => {
+    try {
+      const response = await fetch(`${BASE_URL}/items`, { 
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          title,
+          body,
+          tags,
+          private: isPrivate,
+          tweet
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return {
+        content: [{ 
+          type: "text", 
+          text: JSON.stringify({
+            message: "記事の投稿に成功しました",
+            article: data
+          }, null, 2) 
+        }],
+      };
+    } catch (error) {
+      return {
+        content: [{ type: "text", text: `記事の投稿中にエラーが発生しました: ${error.message}` }],
+      };
+    }
+  }
+);
+
 // 通信を開始
 const transport = new StdioServerTransport();
 await server.connect(transport);
