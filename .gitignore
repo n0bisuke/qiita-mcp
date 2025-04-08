@@ -27,6 +27,21 @@ jspm_packages/
 # Optional eslint cache
 .eslintcache
 
+<<<<<<< HEAD
+=======
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env.test
+
+>>>>>>> e9ab5415fcc07be3002bfedb7c95b69d5ba01321
 # Temporary files
 *.tmp
 *.bak
