@@ -8,6 +8,7 @@ async function fetchQiitaArticles(query) {
           'Authorization': 'Bearer a255792cf9f7dd8d3a92fc4f088a86630d2786c1'
         }
       });
+      
   
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
