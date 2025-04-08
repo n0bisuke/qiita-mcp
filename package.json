@@ -1,0 +1,14 @@
+{
+  "name": "qiita-mcp",
+  "version": "1.0.0",
+  "description": "Qiita API対応MCPサーバー",
+  "main": "fetch-server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node fetch-server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "latest",
+    "zod": "latest"
+  }
+}

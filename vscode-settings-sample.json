@@ -1,0 +1,10 @@
+{
+  "mcp": {
+    "servers": {
+      "qiita-mcp-server": {
+        "command": "node",
+        "args": ["/Users/n0bisuke/ds/3_project/mcp/qiita-mcp/fetch-server.js"]
+      }
+    }
+  }
+}
